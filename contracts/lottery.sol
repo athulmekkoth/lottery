@@ -21,8 +21,23 @@ contract lottery
     {
          return  uint(keccak256(abi.encodePacked(block.difficulty,block.timestamp,participants.length)));
     }  
-    function seletwinner ()public view returns
-    {
-        
+      function pickWinner() public{
+
+        require(msg.sender == manager);
+        require (players.length >= 3);
+
+        uint r = random();
+        address payable winner;
+
+
+        uint index = r % players.length;
+
+        winner = players[index];
+
+        winner.transfer(getBalance());
+
+
+        players = new address payable[](0);
     }
+
 }
