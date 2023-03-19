@@ -3,7 +3,7 @@ contract lottery
 {
     address public manager;
     address payable [] public participants;
-
+address payable public winner;
     constructor()
     {
         manager=msg.sender;//perm to manager
@@ -12,7 +12,7 @@ contract lottery
 
         participants.push(payable(msg.sender));
     }
-    function getbalance() public view returns(uint)
+    function getBalance() public view returns(uint)
     {
         require(msg.sender==manager);
         return address(this).balance;
@@ -24,20 +24,24 @@ contract lottery
       function pickWinner() public{
 
         require(msg.sender == manager);
-        require (players.length >= 3);
+        require (participants.length >= 3);
 
         uint r = random();
-        address payable winner;
+        
 
 
-        uint index = r % players.length;
+        uint index = r % participants.length;
 
-        winner = players[index];
+        winner = participants[index];
 
         winner.transfer(getBalance());
 
 
-        players = new address payable[](0);
+       participants = new address payable[](0);
+    }
+    function alllplayers()  public view returns(address payable[] memory)
+    {
+        return participants;
     }
 
 }
